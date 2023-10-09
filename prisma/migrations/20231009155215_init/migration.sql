@@ -1,0 +1,30 @@
+-- CreateTable
+CREATE TABLE `Menus` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `price` VARCHAR(191) NOT NULL,
+    `status` ENUM('AVAILIABLE', 'UNAVAILABLE') NOT NULL,
+    `detail` VARCHAR(191) NULL,
+    `menuImage` VARCHAR(191) NULL,
+    `createDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `orderMenu` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `menuId` INTEGER NOT NULL,
+    `orderId` INTEGER NOT NULL,
+    `createdDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `orderMenu` ADD CONSTRAINT `orderMenu_menuId_fkey` FOREIGN KEY (`menuId`) REFERENCES `Menus`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `orderMenu` ADD CONSTRAINT `orderMenu_orderId_fkey` FOREIGN KEY (`orderId`) REFERENCES `Orders`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

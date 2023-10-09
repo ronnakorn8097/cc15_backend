@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+///////////////// users /////////////////
+model Users {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  firstName   String?
+  lastName    String?
+  status      Status
+  userImage   String?
+  role        userRole
+  createdDate DateTime @default(now())
+  updateDate  DateTime @default(now())
+  orders      Orders[]
+}
+
+enum Status {
+  AVAILIABLE
+  UNAVAILABLE
+}
+
+enum userRole {
+  ADMIN
+  STAFF
+}
+
+///////////////// Orders /////////////////
+model Orders {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  users       Users       @relation(fields: [userId], references: [id])
+  paymentType paymentType
+  orderType   orderType
+  status      orderStatus
+  discount    String?
+  totalPrice  String
+  createdDate DateTime    @default(now())
+  updateDate  DateTime    @default(now())
+  orderMenus   OrderMenu[]
+}
+
+enum paymentType {
+  CASH
+  QRCODE
+}
+
+enum orderType {
+  WALKIN
+  DELIVERY
+}
+
+enum orderStatus {
+  WAITING
+  COMPLETE
+  VOID
+}
+
+///////////////// Menu /////////////////
+model Menus {
+  id         Int         @id @default(autoincrement())
+  name       String
+  price      String
+  status     Status
+  detail     String?
+  menuImage  String?
+  createDate DateTime    @default(now())
+  updateDate DateTime    @default(now())
+  orderMenus  OrderMenu[]
+}
+
+///////////////// orderMenu /////////////////
+model OrderMenu {
+  id       Int    @id @default(autoincrement())
+  menuId   Int
+  menus    Menus  @relation(fields: [menuId], references: [id])
+  orderId  Int
+  orders   Orders @relation(fields: [orderId], references: [id])
+  createdDate DateTime @default(now())
+  updateDate DateTime @default(now())
+}
