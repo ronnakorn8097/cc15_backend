@@ -17,9 +17,9 @@ model Users {
   password    String
   firstName   String?
   lastName    String?
-  status      Status
+  status      Status @default(AVAILIABLE)
   userImage   String?
-  role        userRole
+  role        userRole @default(STAFF)
   createdDate DateTime @default(now())
   updateDate  DateTime @default(now())
   orders      Orders[]

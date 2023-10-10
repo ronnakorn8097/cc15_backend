@@ -1,0 +1,6 @@
+////////// Register /////////
+POST /authen/register
+    response
+    200 in case success
+    201
+    404 in case error
