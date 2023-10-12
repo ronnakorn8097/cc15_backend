@@ -15,8 +15,8 @@ model Users {
   id          Int      @id @default(autoincrement())
   username    String   @unique
   password    String
-  firstName   String?
-  lastName    String?
+  firstName   String
+  lastName    String
   status      Status @default(AVAILIABLE)
   userImage   String?
   role        userRole @default(STAFF)
@@ -40,9 +40,9 @@ model Orders {
   id          Int         @id @default(autoincrement())
   userId      Int
   users       Users       @relation(fields: [userId], references: [id])
-  paymentType paymentType
-  orderType   orderType
-  status      orderStatus
+  paymentType paymentType @default(CASH)
+  orderType   orderType @default(WALKIN)
+  status      orderStatus @default(WAITING)
   discount    String?
   totalPrice  String
   createdDate DateTime    @default(now())
@@ -71,7 +71,7 @@ model Menus {
   id         Int         @id @default(autoincrement())
   name       String
   price      String
-  status     Status
+  status     Status @default(AVAILIABLE)
   detail     String?
   menuImage  String?
   createDate DateTime    @default(now())

@@ -5,9 +5,10 @@ const cors = require('cors');
 const morgan = require('morgan')
 
 const authenRoute = require('./routes/authenRoute')
+const menuRoute = require('./routes/menuRoute')
 
-const reqNotFound = require('./middlewares/req-notFound');
-const errFromServer = require('./middlewares/errorFromServer');
+const notFoundMiddleware = require('./middlewares/not-found');
+const errorMiddleware = require('./middlewares/error');
 
 const app = express();
 
@@ -16,9 +17,10 @@ app.use(morgan('combined'))
 app.use(express.json()) // convert req.body to js objetc // ให้อ่าน req.body ได้
 
 app.use('/authen',authenRoute);
+app.use('/menu',menuRoute);
 
-app.use(reqNotFound);
-app.use(errFromServer);
+app.use(notFoundMiddleware);
+app.use(errorMiddleware);
 
 
 // สร้าง server

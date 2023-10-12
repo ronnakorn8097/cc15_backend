@@ -8,22 +8,34 @@ const createError = require('../utils/create-error');
 exports.register = async (req, res, next) => {
   try {
     const { value, error } = registerSchema.validate(req.body);
-
     if (error) {
       return next(error);
     }
+
+    const isExistUsername = await prisma.users.findUnique({
+        where : {
+            username : req.body.username
+        }
+    });
+    if(isExistUsername)
+    {
+        return next(createError("username already in use",400))
+    }
+
     // ทำการ bcrypt password ที่ได้มาจาก value
     value.password = await bcrypt.hash(value.password, 10);
 
     const user = await prisma.users.create({
       data: value,
     });
+
     const payload = {userId : user.id}
     const accessToken = jwt.sign(payload,process.env.JWT_SECRET_KEY || 'qwerasdf',
     {expiresIn:process.env.JWT_EXPIRE})
 
     delete user.password
     res.status(201).json({ accessToken,user}); // res to client
+
   } catch (error) {
     console.log(error);
     next(error);

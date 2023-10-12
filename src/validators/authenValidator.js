@@ -7,6 +7,8 @@ exports.registerSchema = joi.object({
     password : joi.string().pattern(/^[a-zA-Z0-9]{6,30}/) // password ต้องมีอย่างน้อย 6 ตัว และไม่เกิน 30
     .trim()
     .required(),
+    confirmpassword : joi.string().valid(joi.ref("password")).trim().required().strip(),
+    role : joi.string().trim()
 
 })
 

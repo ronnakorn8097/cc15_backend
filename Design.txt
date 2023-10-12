@@ -1,6 +1,18 @@
 ////////// Register /////////
 POST /authen/register
+req.body
     response
-    200 in case success
-    201
-    404 in case error
+    201 {accessToken,user} 
+    404 {message : string}
+    500 {message : string}
+
+////////// Login /////////    
+POST /auth/login
+req.body
+    response
+    200 {accessToken,user} 
+    404 {message : string}
+    500 {message : string}
+
+//////////// verify accessToken /////////
+PATCH    
