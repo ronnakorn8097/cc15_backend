@@ -4,8 +4,10 @@ const cors = require('cors');
 // import cors from 'cors'
 const morgan = require('morgan')
 
-const authenRoute = require('./routes/authenRoute')
-const menuRoute = require('./routes/menuRoute')
+const authenRoute = require('./routes/authenRoute');
+const menuRoute = require('./routes/menuRoute');
+const userRoute = require('./routes/userRoute');
+const orderRoute = require('./routes/orderRoute');
 
 const notFoundMiddleware = require('./middlewares/not-found');
 const errorMiddleware = require('./middlewares/error');
@@ -16,8 +18,10 @@ app.use(cors()) // ให้ port สามารถคุยข้ามกั�
 app.use(morgan('combined'))
 app.use(express.json()) // convert req.body to js objetc // ให้อ่าน req.body ได้
 
-app.use('/authen',authenRoute);
-app.use('/menu',menuRoute);
+app.use('/api/auths',authenRoute);
+app.use('/api/menus',menuRoute);
+app.use('/api/users',userRoute)
+app.use('/api/orders',orderRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

@@ -19,7 +19,7 @@ exports.register = async (req, res, next) => {
     });
     if(isExistUsername)
     {
-        return next(createError("username already in use",400))
+        return next(createError("Username already in use",400))
     }
 
     // ทำการ bcrypt password ที่ได้มาจาก value
@@ -34,7 +34,10 @@ exports.register = async (req, res, next) => {
     {expiresIn:process.env.JWT_EXPIRE})
 
     delete user.password
-    res.status(201).json({ accessToken,user}); // res to client
+    res.status(201).json({ message: "Create user success", results: {
+        accessToken: accessToken,user,
+        user
+    }}); // res to client
 
   } catch (error) {
     console.log(error);
@@ -51,7 +54,7 @@ exports.login = async (req,res,next)=>{
         const {value , error} = loginSchema.validate(req.body)
         if(error)
         {
-            return next(createError("invalid credential",404))
+            return next(createError("Unauthorized",401))
         }
         //  หา username ใน database
         const user = await prisma.users.findFirst({
@@ -63,7 +66,7 @@ exports.login = async (req,res,next)=>{
         // ถ้าไม่มี username ใน database
         if(!user)
         {
-           return next(createError("invalid credential",404))
+           return next(createError("Username not found",404))
         }
 
         // ถ้ามี user ให้ compare password ที่เขากรอกมา
@@ -71,7 +74,7 @@ exports.login = async (req,res,next)=>{
         // ถ้า password ไม่ถูกต้อง
         if(!passwordMatch)
         {
-            return next(createError("invalid credential",404))
+            return next(createError("Unauthorized",401))
         }
 
         //ถ้า password match
@@ -80,10 +83,10 @@ exports.login = async (req,res,next)=>{
             payload,process.env.JWT_SECRET_KEY || 'qwerasdf',
             {expiresIn : process.env.JWT_EXPIRE }
         )
-
         delete user.password
-        res.status(200).json({accessToken,user})
+        if (user.status !== "AVAILIABLE") return next(createError("Permission deny", 403))
 
+        res.status(200).json({accessToken,user})
     } catch (error) {
         next(error)
     }
