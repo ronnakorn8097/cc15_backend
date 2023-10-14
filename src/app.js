@@ -8,6 +8,7 @@ const authenRoute = require('./routes/authenRoute');
 const menuRoute = require('./routes/menuRoute');
 const userRoute = require('./routes/userRoute');
 const orderRoute = require('./routes/orderRoute');
+const historyRoute = require('./routes/historyRoute')
 
 const notFoundMiddleware = require('./middlewares/not-found');
 const errorMiddleware = require('./middlewares/error');
@@ -22,6 +23,7 @@ app.use('/api/auths',authenRoute);
 app.use('/api/menus',menuRoute);
 app.use('/api/users',userRoute)
 app.use('/api/orders',orderRoute);
+app.use('/api/history',historyRoute)
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
