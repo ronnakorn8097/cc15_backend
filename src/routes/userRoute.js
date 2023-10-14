@@ -11,7 +11,4 @@ router.get('',authenToken,adminMiddleware,userController.getUsers);
 router.patch('/updateUser',authenToken,adminMiddleware,userController.updateUser);
 
 
-
-
-
 module.exports = router;

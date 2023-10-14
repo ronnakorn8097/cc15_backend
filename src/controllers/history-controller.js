@@ -20,9 +20,7 @@ exports.getHistory = async(req,res,next)=>{
                         }
                     }
                   }
-                
-                         
-            
+                    
         });
         if(!getHistory)
         {
