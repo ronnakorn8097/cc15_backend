@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-router.post('/create',authenToken,orderController.createOrder)
+router.post('/',authenToken,orderController.createOrder)
 
 
 module.exports = router
