@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('',authenToken,menuController.getMenus);
 router.post('/createMenu',authenToken,adminMiddleware,uploadMiddleware.single('menuImage'),menuController.menuCreate);
-router.patch('/updateMenu',authenToken,adminMiddleware,menuController.updateMenus);
+router.patch('/updateMenu',authenToken,adminMiddleware,uploadMiddleware.single('menuImage'),menuController.updateMenus);
 router.delete('/:deleteMenu',authenToken,adminMiddleware,menuController.deleteMenu);
 
 module.exports = router

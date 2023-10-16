@@ -1,4 +1,5 @@
 const prisma = require('../models/prisma');
+const { upload } = require('../utils/cloudinary-service');
 const createError = require('../utils/create-error');
 const {checkUserSchema} = require('../validators/user-Validator')
 
@@ -8,6 +9,11 @@ const {checkUserSchema} = require('../validators/user-Validator')
 exports.updateUser = async(req,res,next)=>{
     try {
         const {value , error} = checkUserSchema.validate(req.body)
+
+        if(req.file)
+        {
+            value.userImage = await upload(req.file.path)
+        }
 
         if(error)
         {

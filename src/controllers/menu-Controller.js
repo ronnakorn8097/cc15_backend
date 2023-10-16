@@ -1,5 +1,7 @@
 const { STATUS_AVAILIABLE, STATUS_UNAVAILABLE } = require("../config/constant");
 const prisma = require("../models/prisma");
+const {upload} = require('../utils/cloudinary-service')
+const fs = require('fs/promises')
 const createError = require("../utils/create-error");
 const {
   checkMenuIdSchema,
@@ -9,7 +11,16 @@ const {
 /////////////////   create  ////////////////
 exports.menuCreate = async (req, res, next) => {
   try {
+   
     const menu = req.body;
+
+  
+    // ถ้าไฟล์รูปมีการส่งเข้ามา
+    if(req.file)
+    {
+      menu.menuImage = await upload(req.file.path);
+    }
+ 
 
     if (!menu) {
       return next(createError("cannot create menu", 400));
@@ -21,6 +32,12 @@ exports.menuCreate = async (req, res, next) => {
     res.status(200).json({ message: "Success create menu", newMenu });
   } catch (error) {
     next(error)
+  }finally{
+    // ลบ รูปออกจาก public
+    if(req.file)
+    {
+      fs.unlink(req.file.path)
+    }
   }
 };
 
@@ -29,9 +46,15 @@ exports.updateMenus = async (req, res, next) => {
   try {
     const { value, error } = checkMenuIdSchema.validate(req.body);
     // const updateMenu = req.body
-    
+    console.log(value)
+    console.log(error)
     if (error) {
       return next(createError("cannot update menu", 400));
+    }
+
+    if(req.file)
+    {
+      value.menuImage = await upload(req.file.path);
     }
 
     const updateMenu = await prisma.menus.update({
@@ -93,7 +116,7 @@ exports.getMenus = async (req,res,next) => {
         menus: getAllMenu,
       },
     };
-    res.status(200).json({ response });
+    res.status(201).json({ response });
   } catch (error) {
     next(error);
   }

@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const prisma = require("../models/prisma");
 const jwt = require('jsonwebtoken')
 const createError = require('../utils/create-error');
+const {upload} = require('../utils/cloudinary-service')
 
 /////////////////////////// Register //////////////////////////
 exports.register = async (req, res, next) => {
@@ -10,6 +11,11 @@ exports.register = async (req, res, next) => {
     const { value, error } = registerSchema.validate(req.body);
     if (error) {
       return next(error);
+    }
+
+    if(req.file)
+    {
+        value.userImage = await upload(req.file.path)
     }
 
     const isExistUsername = await prisma.users.findUnique({
