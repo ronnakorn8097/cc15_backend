@@ -21,9 +21,9 @@ app.use(express.json()) // convert req.body to js objetc // ให้อ่า�
 
 app.use('/api/auths',authenRoute);
 app.use('/api/menus',menuRoute);
-app.use('/api/users',userRoute)
+app.use('/api/users',userRoute);
 app.use('/api/orders',orderRoute);
-app.use('/api/history',historyRoute)
+app.use('/api/history',historyRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

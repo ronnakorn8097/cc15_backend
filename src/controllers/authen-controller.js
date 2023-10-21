@@ -4,10 +4,20 @@ const prisma = require("../models/prisma");
 const jwt = require('jsonwebtoken')
 const createError = require('../utils/create-error');
 const {upload} = require('../utils/cloudinary-service')
+const fs = require('fs/promises');
 
 /////////////////////////// Register //////////////////////////
 exports.register = async (req, res, next) => {
   try {
+
+    // if(!req.body?.role) {
+    //     req.body.role = "STAFF"
+    // }
+
+    // if(!req.body?.status) {
+    //     req.body.status = "AVAILIABLE"
+    // }
+
     const { value, error } = registerSchema.validate(req.body);
     if (error) {
       return next(error);
@@ -40,14 +50,16 @@ exports.register = async (req, res, next) => {
     {expiresIn:process.env.JWT_EXPIRE})
 
     delete user.password
-    res.status(201).json({ message: "Create user success", results: {
-        accessToken: accessToken,user,
-        user
-    }}); // res to client
+    res.status(201).json({ message: "Create user success", accessToken,user}); // res to client
 
   } catch (error) {
     console.log(error);
     next(error);
+  }finally{
+    if(req.file)
+    {
+        fs.unlink(req.file.path)
+    }
   }
 };
 
@@ -56,12 +68,18 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req,res,next)=>{
     try {
-        console.log(req.body)
+      
         const {value , error} = loginSchema.validate(req.body)
         if(error)
         {
             return next(createError("Unauthorized",401))
         }
+
+        if(value.status=== "UNAVAILABLE"){
+            return next(createError("Unauthorized",401))
+        }
+
+        
         //  หา username ใน database
         const user = await prisma.users.findFirst({
             where : {
@@ -96,4 +114,10 @@ exports.login = async (req,res,next)=>{
     } catch (error) {
         next(error)
     }
+}
+
+/////////////////////////// GET ME //////////////////////////
+
+exports.getMe = (req,res)=> {
+    res.status(200).json({user : req.user})
 }

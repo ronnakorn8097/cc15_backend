@@ -12,3 +12,9 @@ const checkUserSchema = joi.object({
 })
 
 exports.checkUserSchema = checkUserSchema;
+
+const checkUserForDelete = joi.object({
+    deleteUser : joi.number().integer().positive().required()
+})
+
+exports.checkUserForDelete = checkUserForDelete;

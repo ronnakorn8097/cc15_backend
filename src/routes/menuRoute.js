@@ -12,6 +12,7 @@ router.get('',authenToken,menuController.getMenus);
 router.post('/createMenu',authenToken,adminMiddleware,uploadMiddleware.single('menuImage'),menuController.menuCreate);
 router.patch('/updateMenu',authenToken,adminMiddleware,uploadMiddleware.single('menuImage'),menuController.updateMenus);
 router.delete('/:deleteMenu',authenToken,adminMiddleware,menuController.deleteMenu);
+router.get('/:menuId',authenToken,adminMiddleware,menuController.getMenuById)
 
 module.exports = router
 

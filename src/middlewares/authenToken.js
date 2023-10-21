@@ -9,7 +9,8 @@ module.exports = async (req,res,next)=>{
     try {
         // check token จาก req.headers
         const authorization = req.headers.authorization;
-     
+        
+       
         
         // ถ้าใน req.heads.authorization ไม่มีค่า
         if(!authorization || !authorization.startsWith(`Bearer `))

@@ -18,7 +18,7 @@ model Users {
   firstName   String
   lastName    String
   status      Status @default(AVAILIABLE)
-  userImage   String?
+  userImage   String? @default("https://res.cloudinary.com/db3ltztig/image/upload/v1697639104/cjppt7yog18bdsv7kd1b.jpg")
   role        userRole @default(STAFF)
   createdDate DateTime @default(now())
   updateDate  DateTime @default(now())
@@ -73,7 +73,7 @@ model Menus {
   price      String
   status     Status @default(AVAILIABLE)
   detail     String?
-  menuImage  String?
+  menuImage  String? @default("https://res.cloudinary.com/db3ltztig/image/upload/v1697638914/hpkbkmtfu52lvp9etcxe.jpg")
   createDate DateTime    @default(now())
   updateDate DateTime    @default(now())
   orderMenus  OrderMenu[]

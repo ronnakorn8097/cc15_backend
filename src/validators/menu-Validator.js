@@ -5,7 +5,7 @@ const checkMenuIdSchema = joi.object({
     name : joi.string(),
     price: joi.string(),
     status : joi.valid("AVAILIABLE","UNAVAILABLE"),
-    detail : joi.string(),
+    detail : joi.string().allow(""),
     menuImage : joi.string()
 });
 
