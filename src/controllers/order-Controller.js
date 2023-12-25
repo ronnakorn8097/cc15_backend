@@ -83,7 +83,7 @@ exports.createOrder = async (req, res, next) => {
       },
     });
 
-    res.status(200).json({ user, createOrder });
+    res.status(200).json({createOrder });
   } catch (error) {
     next(error);
   }
@@ -121,13 +121,32 @@ exports.orderStatus = async (req,res,next) =>{
   try {
     const orderId = req.params.orderId
 
-    await prisma.orders.update({
+     await prisma.orders.update({
       where : {
         id : +orderId
       },data : {
         status : "VOID"
       }
     })
+
+    // const historyWithOutVoid = await prisma.orders.findMany({
+    //   where: {
+    //     NOT: {
+    //       status: "VOID"
+    //     },
+    //     id : true
+    //   },
+    //   select: {
+    //     users: {
+    //       select: {
+    //         firstName: true
+    //       }
+    //     }
+    //   }
+    // });
+    
+    
+    
     res.status(200).json({ message : "Change status success"});
   } catch (error) {
     next(error)

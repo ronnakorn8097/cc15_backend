@@ -26,7 +26,13 @@ exports.getHistory = async(req,res,next)=>{
         {
             return next(createError('Get History failed',404))
         }
-        res.status(200).json({getHistory})
+
+           const getHistoryWithOutVoid = getHistory.filter(el=> el.status !== "VOID")
+        
+        // console.log(getHistory)
+        // getHistoryWithOutVoid show list ที่ไม่รวม status void
+        // getHistory เอาไปใช้เป็น order no ความยาวของ array = order no
+        res.status(200).json({getHistoryWithOutVoid,getHistory})
     } catch (error) {
         next(error)
     }

@@ -3,12 +3,14 @@ const { upload } = require("../utils/cloudinary-service");
 const createError = require("../utils/create-error");
 const { checkUserSchema, checkUserForDelete } = require("../validators/user-Validator");
 const fs = require('fs/promises')
+const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
 
 ////////////// update user ///////////////////
 exports.updateUser = async (req, res, next) => {
   try {
     const { value, error } = checkUserSchema.validate(req.body);
-    
+    console.log(value)
     if (req.file) {
       // value.userImage = await upload(req.file.path)
      
@@ -16,9 +18,15 @@ exports.updateUser = async (req, res, next) => {
     
     }
     if (error) {
-     
+      console.log(error)
       return next(createError("cannot update user", 400));
     }
+    if(value.password)
+    {
+      value.password = await bcrypt.hash(value.password,10)
+
+    }
+
 
     const updateUser = await prisma.users.update({
       where: {

@@ -7,7 +7,7 @@ const checkUserSchema = joi.object({
     firstName : joi.string(),
     lastName : joi.string(),
     status : joi.valid("AVAILIABLE","UNAVAILABLE"),
-    userImage : joi.string(),
+    userImage : joi.string().allow(""),
     role : joi.valid('ADMIN','STAFF')
 })
 
